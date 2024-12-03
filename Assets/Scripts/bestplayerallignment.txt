@@ -1,0 +1,142 @@
+using UnityEngine;
+
+public class PlayerAlignmentController : MonoBehaviour
+{
+    [Header("Player Objects")]
+    public Transform frontObject;  // Front marker of the player
+    public Transform backObject;   // Back marker of the player
+    public Transform centerObject; // Center of the player model
+
+    [Header("Target Objects")]
+    public GolfBallController golfBallController; // GolfBallController to subscribe to
+    public Transform golfBall;     // The actual golf ball in the scene
+    public Transform holeObject;   // The hole the player is aiming for
+
+    [Header("Player Configuration")]
+    public float playerOffset = 1.5f; // Offset distance behind the ball
+    public float rotationSpeed = 50f; // Speed of rotation around the ball
+
+    private bool isTeleporting = false; // Prevent conflicting logic during teleportation
+
+    void Start()
+    {
+        AlignToHole();
+
+        if (golfBallController != null)
+        {
+            // Subscribe to the OnBallStopped event
+            golfBallController.OnBallStopped -= TeleportToBall; // Ensure no duplicate subscriptions
+            golfBallController.OnBallStopped += TeleportToBall;
+            Debug.Log("Subscribed to OnBallStopped event.");
+        }
+        else
+        {
+            Debug.LogError("GolfBallController reference is missing!");
+        }
+    }
+
+    void Update()
+    {
+        if (!isTeleporting)
+        {
+            HandlePlayerRotation();
+        }
+    }
+
+    private void HandlePlayerRotation()
+    {
+        if (golfBall == null || centerObject == null)
+        {
+            Debug.LogError("Golf ball or center object reference is missing!");
+            return;
+        }
+
+        // Rotate Banana Man around the ball using A/D input
+        if (Input.GetKey(KeyCode.A))
+        {
+            RotateAroundBall(-rotationSpeed * Time.deltaTime);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            RotateAroundBall(rotationSpeed * Time.deltaTime);
+        }
+
+        // Ensure Banana Man is always facing the ball
+        FaceBall();
+    }
+
+    private void RotateAroundBall(float angle)
+    {
+        transform.RotateAround(golfBall.position, Vector3.up, angle);
+        Debug.Log($"Rotating Banana Man around ball. Angle: {angle}");
+    }
+
+    private void FaceBall()
+    {
+        if (frontObject == null || golfBall == null)
+        {
+            Debug.LogError("Required references are missing!");
+            return;
+        }
+
+        Vector3 directionToBall = (golfBall.position - centerObject.position).normalized;
+        directionToBall.y = 0; // Ignore vertical alignment
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToBall, Vector3.up);
+        transform.rotation = targetRotation;
+
+        Debug.Log($"Banana Man facing the ball. Target Rotation: {targetRotation.eulerAngles}");
+    }
+
+    private void AlignToHole()
+    {
+        if (frontObject == null || backObject == null || centerObject == null || holeObject == null)
+        {
+            Debug.LogError("Required object references are missing!");
+            return;
+        }
+
+        Vector3 directionToHole = (holeObject.position - golfBall.position).normalized;
+        directionToHole.y = 0;
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToHole, Vector3.up);
+        transform.rotation = targetRotation;
+
+        Debug.Log($"Aligned player model to face the hole. Target Rotation: {targetRotation.eulerAngles}");
+    }
+
+    private void TeleportToBall()
+    {
+        if (golfBall == null || centerObject == null)
+        {
+            Debug.LogError("Golf ball or center object reference is missing!");
+            return;
+        }
+
+        Debug.Log("Teleporting Banana Man...");
+
+        isTeleporting = true; // Prevent other updates during teleportation
+
+        // Calculate offset position behind the ball
+        Vector3 directionToHole = (holeObject.position - golfBall.position).normalized;
+        Vector3 offsetPosition = golfBall.position - directionToHole * playerOffset;
+
+        // Teleport Banana Man to the calculated position
+        transform.position = offsetPosition;
+
+        // Ensure Banana Man faces the hole
+        AlignToHole();
+
+        isTeleporting = false; // Allow updates after teleportation
+
+        Debug.Log($"Banana Man teleported to the ball at position: {transform.position}");
+    }
+
+    void OnDestroy()
+    {
+        if (golfBallController != null)
+        {
+            golfBallController.OnBallStopped -= TeleportToBall;
+        }
+    }
+}

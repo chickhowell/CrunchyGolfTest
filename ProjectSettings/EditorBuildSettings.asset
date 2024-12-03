@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Hole1.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Hole2.unity
+    guid: 7454c93768e79044f8ee690ff016c5d9
+  - enabled: 1
+    path: Assets/Scenes/Hole3.unity
+    guid: 8b3ec71685b886748b34600a5b1faf60
+  - enabled: 1
+    path: Assets/Scenes/Hole4.unity
+    guid: 02e16898e377e8e40872a2e64f929dcc
+  - enabled: 1
+    path: Assets/Scenes/Hole5.unity
+    guid: 03dfc2139d1c9274180e340d27fd0818
+  - enabled: 1
+    path: Assets/Scenes/Hole6.unity
+    guid: 5851923e89b511e43b9d3b1e0cd02519
+  - enabled: 1
+    path: Assets/Scenes/Hole7.unity
+    guid: acd7104b80e4f164ba0a7494c0c06f05
+  - enabled: 1
+    path: Assets/Scenes/Hole8.unity
+    guid: b639978708f7b4745bc1f67f5d5f826d
+  - enabled: 1
+    path: Assets/Scenes/Hole9.unity
+    guid: 392accb6340df9241872ce9f5e39da28
+  - enabled: 1
+    path: Assets/Scenes/Hole10.unity
+    guid: c36f9daa29999c94a82a875cb7e5c4b2
+  - enabled: 1
+    path: Assets/Scenes/Hole11.unity
+    guid: cc459caf6450d7f4cb1ad6d7660b5f70
+  - enabled: 1
+    path: Assets/Scenes/Hole12.unity
+    guid: 394b0290627e0474a934d8d2022e8237
+  - enabled: 1
+    path: Assets/Scenes/Hole13.unity
+    guid: 802b1711209458d43894bc5957418587
+  - enabled: 1
+    path: Assets/Scenes/Hole14.unity
+    guid: 47fc27ffc98cf5244b2e1ce561076f4d
+  - enabled: 1
+    path: Assets/Scenes/Hole15.unity
+    guid: 52375317bafea9140a0e9931f6dc6930
+  - enabled: 1
+    path: Assets/Scenes/Hole16.unity
+    guid: ab6bf59d518a4a34784099ecdc904eaa
+  - enabled: 1
+    path: Assets/Scenes/Hole17.unity
+    guid: c0ae4fb5917001545a1e42f90dedc46c
+  - enabled: 1
+    path: Assets/Scenes/Hole18.unity
+    guid: f9ed2d4683b35fc44806f556b0bc64b1
+  - enabled: 1
+    path: Assets/Scenes/EndScreen.unity
+    guid: 8913651f51b8dec46b6b554f48c9d265
+  m_configObjects: {}

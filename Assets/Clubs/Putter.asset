@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f4dd2b89ac29604284fa3697aea8b70, type: 3}
+  m_Name: Putter
+  m_EditorClassIdentifier: 
+  clubName: Putter
+  minForceMultiplier: 0.01
+  maxForceMultiplier: 0.6
+  loftAngle: 0
+  accuracyModifier: 1
+  minTargetDistance: 1
+  maxTargetDistance: 10
+  isPutter: 1
+  hitSounds:
+  - {fileID: 8300000, guid: da93a2b4207a66b4d872bbb91c5fcbd2, type: 3}
