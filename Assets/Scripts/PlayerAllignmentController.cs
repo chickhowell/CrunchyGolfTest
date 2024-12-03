@@ -6,13 +6,9 @@ public class PlayerAlignmentController : MonoBehaviour
     public GolfBallController golfBallController; // GolfBallController to subscribe to
     public Transform golfBall;                    // The actual golf ball in the scene
 
-    [Header("Player Configuration")]
-    public float rotationSpeed = 50f;             // Speed of rotation around the ball
-    public Vector3 positionOffset;                // Manual position offsets (X, Z)
-    public float manualRotationOffset = 0f;       // Manual rotation offset in degrees
-
-    [Header("Match Target Offsets")]
-    public Vector3 matchTargetPositionOffset;     // Additive offset for target position
+    [Header("Character Offsets")]
+    public Vector3 positionOffset;     // Additive offset relative to ball position
+    public float yRotationOffset;      // Additive rotation relative to camera orientation
 
     private bool isTeleporting = false;           // Prevent conflicts during teleportation
 
@@ -22,7 +18,6 @@ public class PlayerAlignmentController : MonoBehaviour
 
         if (golfBallController != null)
         {
-            golfBallController.OnBallStopped -= TeleportToBall; // Prevent duplicate subscriptions
             golfBallController.OnBallStopped += TeleportToBall;
             Debug.Log("Subscribed to OnBallStopped event.");
         }
@@ -36,28 +31,18 @@ public class PlayerAlignmentController : MonoBehaviour
     {
         if (!isTeleporting)
         {
-            HandleRotationInput();
-        }
-    }
-
-    private void HandleRotationInput()
-    {
-        if (golfBall == null) return;
-
-        float horizontalInput = Input.GetAxis("Horizontal");
-        if (Mathf.Abs(horizontalInput) > 0.01f)
-        {
-            RotateAroundBall(horizontalInput * Time.deltaTime * rotationSpeed);
+            float angleDelta = Camera.main.transform.eulerAngles.y - transform.eulerAngles.y;
+            RotateAroundBall(angleDelta + yRotationOffset);
         }
     }
 
     private void RotateAroundBall(float angle)
     {
         if (golfBall == null) return;
-
+    
         // Rotate around the ball's position
         transform.RotateAround(golfBall.position, Vector3.up, angle);
-
+    
         // Reapply rotation adjustments
         // AlignRotation();
         Debug.Log($"Rotating Banana Man around ball. Angle: {angle}");
@@ -68,8 +53,7 @@ public class PlayerAlignmentController : MonoBehaviour
         if (golfBall == null) return;
 
         // Calculate the position relative to the ball + offsets
-        Vector3 directionToCamera = -Camera.main.transform.forward;
-		Vector3 adjustedPosition = golfBall.position + matchTargetPositionOffset;
+		Vector3 adjustedPosition = golfBall.position + positionOffset;
 
         // Apply manual position offsets
         // adjustedPosition += new Vector3(positionOffset.x, 0, positionOffset.z);
@@ -97,17 +81,12 @@ public class PlayerAlignmentController : MonoBehaviour
         // Create a rotation to face the ball
         Quaternion targetRotation = Quaternion.LookRotation(directionToBall, Vector3.up);
 
-        // Apply manual rotation offset
-        targetRotation *= Quaternion.Euler(0, manualRotationOffset, 0);
-
         // Apply the rotation to Banana Man
         transform.rotation = targetRotation;
 
         Debug.Log($"Banana Man rotation aligned. Rotation: {transform.rotation.eulerAngles}");
     }
-
-
-
+    
     private void TeleportToBall()
     {
         Debug.Log("Teleporting Banana Man...");
