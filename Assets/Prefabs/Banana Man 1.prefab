@@ -2155,7 +2155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   golfBall: {fileID: 0}
-  target: {fileID: 0}
+  target: {fileID: 8613270918479572889, guid: 2ab1c0b54b260a143830e99ca1cf6c7c, type: 3}
   powerGauge: {fileID: 0}
   accuracyGauge: {fileID: 0}
   targetLine: {fileID: 0}
@@ -2185,10 +2185,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   golfBallController: {fileID: 0}
-  golfBall: {fileID: 0}
-  playerOffset: 1
-  rotationSpeed: 50
-  defaultRotation: {x: 0, y: 0, z: 0, w: 0}
+  golfBall: {fileID: 6186787043706185201, guid: 2ab1c0b54b260a143830e99ca1cf6c7c, type: 3}
+  positionOffset: {x: 0, y: 0, z: 0}
+  yRotationOffset: 0
 --- !u!1 &7914487213229456821
 GameObject:
   m_ObjectHideFlags: 0

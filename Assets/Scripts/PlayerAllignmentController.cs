@@ -19,11 +19,11 @@ public class PlayerAlignmentController : MonoBehaviour
         if (golfBallController != null)
         {
             golfBallController.OnBallStopped += TeleportToBall;
-            Debug.Log("Subscribed to OnBallStopped event.");
+            //Debug.Log("Subscribed to OnBallStopped event.");
         }
         else
         {
-            Debug.LogError("GolfBallController reference is missing!");
+            //Debug.LogError("GolfBallController reference is missing!");
         }
     }
 
@@ -45,7 +45,7 @@ public class PlayerAlignmentController : MonoBehaviour
     
         // Reapply rotation adjustments
         // AlignRotation();
-        Debug.Log($"Rotating Banana Man around ball. Angle: {angle}");
+        //Debug.Log($"Rotating Banana Man around ball. Angle: {angle}");
     }
 
     private void AlignToBall()
@@ -84,18 +84,18 @@ public class PlayerAlignmentController : MonoBehaviour
         // Apply the rotation to Banana Man
         transform.rotation = targetRotation;
 
-        Debug.Log($"Banana Man rotation aligned. Rotation: {transform.rotation.eulerAngles}");
+        //Debug.Log($"Banana Man rotation aligned. Rotation: {transform.rotation.eulerAngles}");
     }
     
     private void TeleportToBall()
     {
-        Debug.Log("Teleporting Banana Man...");
+        //Debug.Log("Teleporting Banana Man...");
         isTeleporting = true; // Prevent conflicts during teleportation
 
         AlignToBall();
 
         isTeleporting = false; // Allow updates after teleportation
-        Debug.Log($"Banana Man teleported to the ball at position: {transform.position}");
+        //Debug.Log($"Banana Man teleported to the ball at position: {transform.position}");
     }
 
     private Vector3 AdjustHeightToGround(Vector3 position)
@@ -105,11 +105,11 @@ public class PlayerAlignmentController : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 10f))
         {
             position.y = hitInfo.point.y; // Adjust Y-coordinate to the ground
-            Debug.Log($"Ground detected at height: {hitInfo.point.y}");
+            //Debug.Log($"Ground detected at height: {hitInfo.point.y}");
         }
         else
         {
-            Debug.LogWarning("No ground detected under Banana Man! Defaulting to original position.");
+            //Debug.LogWarning("No ground detected under Banana Man! Defaulting to original position.");
         }
 
         return position;

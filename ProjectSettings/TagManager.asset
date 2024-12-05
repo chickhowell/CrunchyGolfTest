@@ -6,6 +6,10 @@ TagManager:
   tags:
   - GolfBall
   - LandingTarget
+  - tee
+  - TeePosition
+  - Hole
+  - player
   layers:
   - Default
   - TransparentFX

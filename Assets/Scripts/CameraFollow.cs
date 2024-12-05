@@ -2,17 +2,44 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform target;            // Golf ball reference
-    public Transform hole;              // Hole reference
-    public float startDistance = 8f;    // Distance behind the ball
-    public float height = 3f;           // Height above the ball
-    public float rotationSpeed = 50f;   // Speed of camera rotation
-    public float followSmoothSpeed = 0.125f; // Smooth follow speed after the ball is hit
-    private bool isLocked = true;       // Is the camera locked for aiming?
-    private float currentAngle = 0f;    // Current rotation angle of the camera
+    [Header("Target and Hole References")]
+    public Transform target; // Reference to the GolfBall
+    public Transform hole;   // Reference to the final Hole
+
+    [Header("Camera Settings")]
+    public float startDistance = 8f;         // Distance behind the ball
+    public float height = 3f;                // Height above the ball
+    public float rotationSpeed = 50f;        // Speed of camera rotation
+    public float followSmoothSpeed = 0.125f; // Smooth follow speed for the ball
+
+    private bool isLocked = true;            // Is the camera locked for aiming?
+    private float currentAngle = 0f;         // Current rotation angle of the camera
 
     void Start()
     {
+        Debug.Log("Starting CameraFollow...");
+
+        // Dynamically assign the GolfBall as target if not assigned
+        if (target == null)
+        {
+            GameObject golfBall = GameObject.Find("GolfBall");
+            if (golfBall != null)
+            {
+                target = golfBall.transform;
+                Debug.Log("Target dynamically assigned to GolfBall.");
+            }
+            else
+            {
+                Debug.LogError("GolfBall not found in the scene! Camera will not follow the ball.");
+            }
+        }
+
+        // Warn if the hole reference is missing
+        if (hole == null)
+        {
+            Debug.LogWarning("Hole reference is missing! Camera alignment to the hole may not work.");
+        }
+
         AlignCameraToHole();
     }
 
@@ -32,28 +59,30 @@ public class CameraFollow : MonoBehaviour
 
     private void AlignCameraToHole()
     {
-        if (target == null || hole == null)
+        if (target == null)
         {
-            Debug.LogError("Target or Hole reference is missing!");
+            Debug.LogError("Target is missing! Camera alignment skipped.");
             return;
         }
 
-        // Calculate direction from ball to hole
-        Vector3 directionToHole = (hole.position - target.position).normalized;
+        if (hole == null)
+        {
+            Debug.LogWarning("Hole is missing! Camera will align to the ball only.");
+        }
+
+        // Calculate direction to the hole (or default forward if missing)
+        Vector3 directionToHole = (hole != null) ? (hole.position - target.position).normalized : Vector3.forward;
 
         // Set the camera's position relative to the ball and hole
         Vector3 cameraPosition = target.position - directionToHole * startDistance;
         cameraPosition.y += height;
 
         transform.position = cameraPosition;
-
-        // Ensure the camera looks at the ball
         transform.LookAt(target.position);
 
-        // Align the initial rotation angle to match the hole
         currentAngle = Quaternion.LookRotation(directionToHole, Vector3.up).eulerAngles.y;
 
-        Debug.Log($"Camera aligned to hole. Position: {transform.position}, Rotation: {transform.rotation.eulerAngles}");
+        Debug.Log($"Camera aligned to target. Position: {transform.position}, Rotation: {transform.rotation.eulerAngles}");
     }
 
     private void HandleCameraRotation()
@@ -62,7 +91,6 @@ public class CameraFollow : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         currentAngle += horizontalInput * rotationSpeed * Time.deltaTime;
 
-        // Calculate the camera's position
         Quaternion rotation = Quaternion.Euler(0f, currentAngle, 0f);
         Vector3 offset = rotation * Vector3.back * startDistance + Vector3.up * height;
 
@@ -78,21 +106,35 @@ public class CameraFollow : MonoBehaviour
         transform.LookAt(target.position);
     }
 
+    public void AlignToTarget()
+    {
+        if (target == null)
+        {
+            Debug.LogError("Target is missing! Cannot align camera.");
+            return;
+        }
+
+        Vector3 desiredPosition = target.position - Vector3.forward * startDistance + Vector3.up * height;
+        transform.position = desiredPosition;
+        transform.LookAt(target.position);
+
+        Debug.Log($"Camera aligned to target. Position: {transform.position}, Rotation: {transform.rotation.eulerAngles}");
+    }
+
     public Vector3 GetShotDirection()
     {
-        // Return the camera's forward vector directly
-        Vector3 direction = transform.forward.normalized;
-        Debug.Log($"Shot Direction (Camera): {direction}");
-        return direction;
+        return transform.forward.normalized;
     }
 
     public void UnlockCamera()
     {
         isLocked = false;
+        Debug.Log("Camera unlocked.");
     }
 
     public void LockCamera()
     {
         isLocked = true;
+        Debug.Log("Camera locked.");
     }
 }
